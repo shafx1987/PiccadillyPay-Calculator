@@ -24,7 +24,7 @@ A simple, offline wage calculator for Network Rail Piccadilly station staff to q
 ## How to Use
 
 1. Download or clone this repository
-2. Open `wage_calculator.html` in any web browser
+2. Open `index.html` in any web browser
 3. Enter your annual salary and lock it with the padlock
 4. Select your pay period
 5. Enter your shift hours for the period
