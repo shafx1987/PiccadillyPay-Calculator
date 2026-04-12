@@ -1,0 +1,1236 @@
+<!-- Made by Shaffy with a little help from Claude - Started 26.03.2026 - Finished V1 on 11.04.2026 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piccadilly Pay Calculator V1.0</title>
+  <style>
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f5;
+      --bg-tertiary: #f0f0f0;
+      --text-primary: #1a1a1a;
+      --text-secondary: #666;
+      --border-color: #d0d0d0;
+      --shadow-color: rgba(0,0,0,0.05);
+    }
+
+    body.dark-mode {
+      --bg-primary: #1a1a1a;
+      --bg-secondary: #2a2a2a;
+      --bg-tertiary: #3a3a3a;
+      --text-primary: #e8e8e8;
+      --text-secondary: #b0b0b0;
+      --border-color: #444;
+      --shadow-color: rgba(0,0,0,0.3);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: var(--text-primary);
+      background: var(--bg-secondary);
+      padding: 1rem 1rem 7rem 1rem;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 0;
+    }
+    .card {
+      background: var(--bg-primary);
+      border: 0.5px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 2px var(--shadow-color);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+    h2 {
+      font-size: 18px;
+      font-weight: 500;
+      margin: 0 0 1.5rem 0;
+      color: var(--text-primary);
+    }
+    h3 {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin: 1rem 0 0.75rem 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    h4 {
+      font-size: 13px;
+      font-weight: 500;
+      margin: 0 0 0.75rem 0;
+      color: var(--text-secondary);
+    }
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+    .rate-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .rate-percentage {
+      color: var(--text-primary);
+    }
+    .rate-value {
+      color: var(--text-secondary);
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+    }
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 14px;
+      box-sizing: border-box;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+      min-height: 44px;
+    }
+    input[type="number"] {
+      font-family: "Courier New", monospace;
+    }
+    input[type="checkbox"] {
+      margin-right: 0.5rem;
+      cursor: pointer;
+      width: 18px;
+      height: 18px;
+    }
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .salary-input-wrapper {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .currency-input {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      border: 0.5px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.3s ease;
+    }
+    .currency-prefix {
+      padding: 0.75rem 0.75rem;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      font-family: "Courier New", monospace;
+      font-weight: 500;
+      border-right: 0.5px solid var(--border-color);
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+    .currency-input input {
+      flex: 1;
+      border: none;
+      padding: 0.75rem;
+      margin: 0;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .lock-btn {
+      background: var(--bg-primary);
+      border: 0.5px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      min-width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .lock-btn:hover {
+      background: var(--bg-tertiary);
+    }
+    .lock-btn.locked {
+      background: var(--bg-tertiary);
+    }
+    .hourly-breakdown {
+      background: var(--bg-tertiary);
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 1.5rem;
+      transition: background-color 0.3s ease;
+    }
+    .hourly-breakdown-label {
+      color: var(--text-secondary);
+      font-size: 12px;
+      margin-bottom: 0.25rem;
+    }
+    .hourly-breakdown-value {
+      font-family: "Courier New", monospace;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .overtime-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 1.25rem;
+    }
+    .overtime-input-section {
+      display: flex;
+      flex-direction: column;
+    }
+    .overtime-input-section label {
+      margin-bottom: 0.5rem;
+    }
+    .overtime-input-section input {
+      flex: 1;
+    }
+    .overtime-value-section {
+      display: flex;
+      flex-direction: column;
+    }
+    .overtime-value-section label {
+      margin-bottom: 0.5rem;
+      font-size: 13px;
+      color: #666;
+    }
+    .overtime-value-display {
+      background: #f0f0f0;
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #666;
+      font-family: "Courier New", monospace;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .bh-input-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .accordion-section {
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      background: var(--bg-primary);
+    }
+    .accordion-header {
+      width: 100%;
+      padding: 1rem;
+      background: var(--bg-secondary);
+      border: none;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-primary);
+      transition: background-color 0.3s ease;
+    }
+    .accordion-header:hover {
+      background: var(--bg-tertiary);
+    }
+    .accordion-header::after {
+      content: "▶";
+      display: inline-block;
+      transition: transform 0.3s ease;
+      font-size: 12px;
+    }
+    .accordion-header.open::after {
+      transform: rotate(90deg);
+    }
+    .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      padding: 0 1rem;
+    }
+    .accordion-content.open {
+      max-height: 500px;
+      padding: 1rem;
+    }
+    button {
+      background: var(--bg-primary);
+      border: 0.5px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      min-height: 44px;
+      min-width: 44px;
+    }
+    button:active {
+      transform: scale(0.98);
+    }
+    
+    /* RESPONSIVE MEDIA QUERIES */
+    /* Tablet and above (768px+) */
+    @media (min-width: 768px) {
+      body {
+        padding: 2rem 1rem;
+      }
+
+      .container {
+        max-width: 700px;
+      }
+
+      .dark-mode-toggle {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        bottom: auto;
+      }
+
+      .dark-mode-toggle:hover {
+        background: var(--bg-tertiary);
+      }
+
+      button:hover {
+        background: var(--bg-tertiary);
+      }
+    }
+
+    /* Large screens (1024px+) */
+    @media (min-width: 1024px) {
+      .container {
+        max-width: 800px;
+      }
+    }
+    .breakdown {
+      display: grid;
+      gap: 0.75rem;
+    }
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      padding: 0.5rem 0;
+      border-bottom: 0.5px solid var(--border-color);
+      transition: border-color 0.3s ease;
+    }
+    .breakdown-row.total {
+      border-bottom: none;
+      border-top: 0.5px solid var(--border-color);
+      padding-top: 0.75rem;
+      margin-top: 0.75rem;
+      font-weight: 500;
+      font-size: 16px;
+    }
+    .breakdown-label {
+      color: var(--text-secondary);
+    }
+    .breakdown-value {
+      font-family: "Courier New", monospace;
+      text-align: right;
+      color: var(--text-primary);
+    }
+    .metric-card {
+      background: var(--bg-tertiary);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      transition: background-color 0.3s ease;
+    }
+    .metric-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.5rem;
+    }
+    .metric-value {
+      font-size: 24px;
+      font-weight: 500;
+      font-family: "Courier New", monospace;
+      color: var(--text-primary);
+    }
+    .period-info {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 0.5rem;
+    }
+    .dark-mode-toggle {
+      position: fixed;
+      top: 1.5rem;
+      right: 1rem;
+      background: var(--bg-primary);
+      border: 0.5px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+      z-index: 1000;
+      min-height: 44px;
+      min-width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tax-details-btn {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      background: var(--bg-tertiary);
+      border: 0.5px solid var(--border-color);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+    }
+    .tax-details-btn:hover {
+      background: var(--border-color);
+    }
+    .tax-details-content {
+      background: var(--bg-secondary);
+      padding: 0.75rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    /* PAY PERIOD MANAGEMENT */
+  </style>
+</head>
+<body>
+<button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle dark mode">🌙</button>
+<div class="container">
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" alt="Network Rail" style="max-width: 300px; height: auto; margin-bottom: 1rem;">
+  </div>
+  <div class="card">
+    <h2>Piccadilly Pay Calculator V1.0</h2>
+    
+    <h3>Salary</h3>
+    <div class="form-group">
+      <label>Annual salary</label>
+      <div class="salary-input-wrapper">
+        <div class="currency-input">
+          <span class="currency-prefix">£</span>
+          <input type="number" id="salaryInput" value="28338" step="0.01" placeholder="0.00">
+        </div>
+        <button class="lock-btn" id="lockBtn" onclick="toggleLock()" title="Lock salary to prevent changes">🔓</button>
+      </div>
+      <div style="font-size: 12px; color: var(--text-secondary); margin-top: 0.5rem;">
+        Please enter your yearly salary and lock it with the padlock to prevent accidental changes.
+      </div>
+    </div>
+
+    <div class="hourly-breakdown">
+      <div class="hourly-breakdown-label">Hourly rate (based on 35 hrs/week)</div>
+      <div class="hourly-breakdown-value" id="hourlyRate">£15.40</div>
+    </div>
+
+    <h3>Pay period</h3>
+    <div class="form-group">
+      <label>Select pay period</label>
+      <select id="payPeriod" onchange="handlePayPeriodChange()">
+        <option value="">Select a period...</option>
+      </select>
+      <p class="period-info" id="periodDates"></p>
+    </div>
+
+    <h3>Overtime hours</h3>
+    
+    <div class="overtime-box">
+      <div class="overtime-input-section">
+        <label class="rate-label">
+          <span class="rate-percentage">Standard overtime (125%)</span>
+          <span class="rate-value" id="stdOtRate">£19.25</span>
+        </label>
+        <input type="number" id="standardOt" min="0" step="0.5" value="0" placeholder="Hours" oninput="validateInput(this)" onchange="updateOvertimeValue()">
+      </div>
+      <div class="overtime-value-section">
+        <label>Value</label>
+        <div class="overtime-value-display" id="stdOtValue">£0.00</div>
+      </div>
+    </div>
+
+    <div class="overtime-box">
+      <div class="overtime-input-section">
+        <label class="rate-label">
+          <span class="rate-percentage">Sunday pay (125%)</span>
+          <span class="rate-value" id="sunRate">£19.25</span>
+        </label>
+        <input type="number" id="sundayPay" min="0" step="0.5" value="0" placeholder="Hours" oninput="validateInput(this)" onchange="updateOvertimeValue()">
+      </div>
+      <div class="overtime-value-section">
+        <label>Value</label>
+        <div class="overtime-value-display" id="sunValue">£0.00</div>
+      </div>
+    </div>
+
+    <div class="accordion-section">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        📅 Bank Holiday (rostered/non-rostered)
+      </button>
+      <div class="accordion-content" id="regularBhFields">
+        <div class="bh-input-box">
+          <div class="overtime-input-section">
+            <label class="rate-label">
+              <span class="rate-percentage">Rostered in (150%)</span>
+              <span class="rate-value" id="bhRosteredRate">£23.10</span>
+            </label>
+            <input type="number" id="bhRostered" min="0" step="0.5" value="0" placeholder="Hours" oninput="validateInput(this)" onchange="updateBhValue()">
+          </div>
+          <div class="overtime-value-section">
+            <label>Value</label>
+            <div class="overtime-value-display" id="bhRosteredValue">£0.00</div>
+          </div>
+        </div>
+        <div class="bh-input-box">
+          <div class="overtime-input-section">
+            <label class="rate-label">
+              <span class="rate-percentage">Not rostered in (250%)</span>
+              <span class="rate-value" id="bhNonRosteredRate">£38.50</span>
+            </label>
+            <input type="number" id="bhNonRostered" min="0" step="0.5" value="0" placeholder="Hours" oninput="validateInput(this)" onchange="updateBhValue()">
+          </div>
+          <div class="overtime-value-section">
+            <label>Value</label>
+            <div class="overtime-value-display" id="bhNonRosteredValue">£0.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-section">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        🎄 Christmas Day (rostered/non-rostered)
+      </button>
+      <div class="accordion-content" id="xmasDayFields">
+        <div class="bh-input-box">
+          <div class="overtime-input-section">
+            <label class="rate-label">
+              <span class="rate-percentage">Rostered in (200%)</span>
+              <span class="rate-value" id="xmasRosteredRate">£30.80</span>
+            </label>
+            <input type="number" id="xmasRostered" min="0" step="0.5" value="0" placeholder="Hours" oninput="validateInput(this)" onchange="updateXmasValue()">
+          </div>
+          <div class="overtime-value-section">
+            <label>Value</label>
+            <div class="overtime-value-display" id="xmasRosteredValue">£0.00</div>
+          </div>
+        </div>
+        <div class="bh-input-box">
+          <div class="overtime-input-section">
+            <label class="rate-label">
+              <span class="rate-percentage">Not rostered in (300%)</span>
+              <span class="rate-value" id="xmasNonRosteredRate">£46.20</span>
+            </label>
+            <input type="number" id="xmasNonRostered" min="0" step="0.5" value="0" placeholder="Hours" oninput="validateInput(this)" onchange="updateXmasValue()">
+          </div>
+          <div class="overtime-value-section">
+            <label>Value</label>
+            <div class="overtime-value-display" id="xmasNonRosteredValue">£0.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-section">
+      <button class="accordion-header" onclick="toggleAccordion(this)">
+        📦 Boxing Day (rostered/non-rostered)
+      </button>
+      <div class="accordion-content" id="boxingDayFields">
+        <div class="bh-input-box">
+          <div class="overtime-input-section">
+            <label class="rate-label">
+              <span class="rate-percentage">Rostered in (200%)</span>
+              <span class="rate-value" id="boxingRosteredRate">£30.80</span>
+            </label>
+            <input type="number" id="boxingRostered" min="0" step="0.5" value="0" placeholder="Hours" oninput="validateInput(this)" onchange="updateBoxingValue()">
+          </div>
+          <div class="overtime-value-section">
+            <label>Value</label>
+            <div class="overtime-value-display" id="boxingRosteredValue">£0.00</div>
+          </div>
+        </div>
+        <div class="bh-input-box">
+          <div class="overtime-input-section">
+            <label class="rate-label">
+              <span class="rate-percentage">Not rostered in (300%)</span>
+              <span class="rate-value" id="boxingNonRosteredRate">£46.20</span>
+            </label>
+            <input type="number" id="boxingNonRostered" min="0" step="0.5" value="0" placeholder="Hours" oninput="validateInput(this)" onchange="updateBoxingValue()">
+          </div>
+          <div class="overtime-value-section">
+            <label>Value</label>
+            <div class="overtime-value-display" id="boxingNonRosteredValue">£0.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button onclick="calculateWage()" style="margin-top: 1.5rem; width: 100%;">Calculate</button>
+  </div>
+
+  <div class="card" id="resultsCard" style="display: none;">
+    <h2>Wage breakdown</h2>
+    
+    <div class="metric-card">
+      <div class="metric-label">Total pay (gross)</div>
+      <div class="metric-value" id="totalPay">£0.00</div>
+    </div>
+
+    <div class="breakdown" id="breakdown"></div>
+
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input type="checkbox" id="showTaxCheckbox" onchange="calculateWage()">
+        Include UK tax and national insurance estimate
+      </label>
+      <div style="font-size: 12px; color: var(--text-secondary); margin-top: 0.5rem; padding: 0.75rem; background: var(--bg-tertiary); border-radius: 6px; border-left: 3px solid #f57c00;">
+        <strong>⚠️ Disclaimer:</strong> This is an estimate only and should not be relied upon as accurate tax calculation. It does not account for personal tax codes, pension contributions, student loan repayments, other deductions, or additional income. Please consult HMRC or a tax professional for accurate figures.
+      </div>
+    </div>
+
+    <div id="taxSection" style="display: none;">
+      <div class="breakdown" id="taxBreakdown"></div>
+      <div class="metric-card" style="margin-top: 1rem;">
+        <div class="metric-label">Net pay (after tax &amp; NI)</div>
+        <div class="metric-value" id="netPay">£0.00</div>
+      </div>
+    </div>
+
+    <button onclick="saveWage()" style="margin-top: 1.5rem; width: 100%; background: var(--bg-tertiary);">Save this pay period</button>
+    <button onclick="clearSavedWage()" style="margin-top: 0.5rem; width: 100%; background: #fff5f5; color: #a32d2d; display: none;" id="clearBtn">Clear saved data</button>
+    <button onclick="resetAllWithConfirmation()" style="margin-top: 0.5rem; width: 100%; background: #ffe0e0; color: #8b0000;">Reset all fields</button>
+  </div>
+
+<script>
+  // Dark mode toggle
+  function toggleDarkMode() {
+    const html = document.documentElement;
+    const isDarkMode = html.querySelector('body').classList.toggle('dark-mode');
+    const toggle = document.querySelector('.dark-mode-toggle');
+    toggle.textContent = isDarkMode ? '☀️' : '🌙';
+    localStorage.setItem('darkMode', isDarkMode);
+  }
+
+  // Load dark mode preference on page load
+  if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+    document.querySelector('.dark-mode-toggle').textContent = '☀️';
+  }
+
+  // SALARY LOCK
+  let isSalaryLocked = localStorage.getItem('salaryLocked') !== 'false'; // Default to locked
+
+  function toggleLock() {
+    isSalaryLocked = !isSalaryLocked;
+    localStorage.setItem('salaryLocked', isSalaryLocked);
+    updateSalaryLockState();
+  }
+
+  function updateSalaryLockState() {
+    const input = document.getElementById('salaryInput');
+    const btn = document.getElementById('lockBtn');
+    
+    if (!input || !btn) return; // Safety check
+    
+    input.disabled = isSalaryLocked;
+    btn.classList.toggle('locked', isSalaryLocked);
+    btn.textContent = isSalaryLocked ? '🔒' : '🔓';
+  }
+
+  const payPeriodWeeks = 4;
+  const lastPayDate = new Date(2026, 2, 27);
+
+  function getHourlyRate() {
+    const salary = parseFloat(document.getElementById('salaryInput').value) || 0;
+    const hoursPerYear = 52 * 35;
+    return salary / hoursPerYear;
+  }
+
+  function calculateHourlyRate() {
+    const hourly = getHourlyRate();
+    document.getElementById('hourlyRate').textContent = '£' + hourly.toFixed(2);
+    
+    document.getElementById('stdOtRate').textContent = '£' + (hourly * 1.25).toFixed(2);
+    document.getElementById('sunRate').textContent = '£' + (hourly * 1.25).toFixed(2);
+    document.getElementById('bhRosteredRate').textContent = '£' + (hourly * 1.50).toFixed(2);
+    document.getElementById('bhNonRosteredRate').textContent = '£' + (hourly * 2.50).toFixed(2);
+    document.getElementById('xmasRosteredRate').textContent = '£' + (hourly * 2.00).toFixed(2);
+    document.getElementById('xmasNonRosteredRate').textContent = '£' + (hourly * 3.00).toFixed(2);
+    document.getElementById('boxingRosteredRate').textContent = '£' + (hourly * 2.00).toFixed(2);
+    document.getElementById('boxingNonRosteredRate').textContent = '£' + (hourly * 3.00).toFixed(2);
+    
+    updateOvertimeValue();
+    updateBhValue();
+    updateXmasValue();
+    updateBoxingValue();
+  }
+
+  function updateOvertimeValue() {
+    const hourly = getHourlyRate();
+    const standardOt = parseFloat(document.getElementById('standardOt').value) || 0;
+    const sundayPay = parseFloat(document.getElementById('sundayPay').value) || 0;
+    
+    document.getElementById('stdOtValue').textContent = '£' + (standardOt * hourly * 1.25).toFixed(2);
+    document.getElementById('sunValue').textContent = '£' + (sundayPay * hourly * 1.25).toFixed(2);
+  }
+
+  function updateBhValue() {
+    const hourly = getHourlyRate();
+    const bhRostered = parseFloat(document.getElementById('bhRostered').value) || 0;
+    const bhNonRostered = parseFloat(document.getElementById('bhNonRostered').value) || 0;
+    
+    document.getElementById('bhRosteredValue').textContent = '£' + (bhRostered * hourly * 1.50).toFixed(2);
+    document.getElementById('bhNonRosteredValue').textContent = '£' + (bhNonRostered * hourly * 2.50).toFixed(2);
+  }
+
+  function updateXmasValue() {
+    const hourly = getHourlyRate();
+    const xmasRostered = parseFloat(document.getElementById('xmasRostered').value) || 0;
+    const xmasNonRostered = parseFloat(document.getElementById('xmasNonRostered').value) || 0;
+    
+    document.getElementById('xmasRosteredValue').textContent = '£' + (xmasRostered * hourly * 2.00).toFixed(2);
+    document.getElementById('xmasNonRosteredValue').textContent = '£' + (xmasNonRostered * hourly * 3.00).toFixed(2);
+  }
+
+  function updateBoxingValue() {
+    const hourly = getHourlyRate();
+    const boxingRostered = parseFloat(document.getElementById('boxingRostered').value) || 0;
+    const boxingNonRostered = parseFloat(document.getElementById('boxingNonRostered').value) || 0;
+    
+    document.getElementById('boxingRosteredValue').textContent = '£' + (boxingRostered * hourly * 2.00).toFixed(2);
+    document.getElementById('boxingNonRosteredValue').textContent = '£' + (boxingNonRostered * hourly * 3.00).toFixed(2);
+  }
+
+  function validateInput(input) {
+    // Remove any non-numeric characters except decimal point
+    input.value = input.value.replace(/[^\d.]/g, '');
+    
+    // Ensure only one decimal point
+    const parts = input.value.split('.');
+    if (parts.length > 2) {
+      input.value = parts[0] + '.' + parts[1];
+    }
+    
+    // Ensure value is not negative
+    if (input.value && parseFloat(input.value) < 0) {
+      input.value = '';
+    }
+  }
+
+  function toggleAccordion(button) {
+    const content = button.nextElementSibling;
+    button.classList.toggle('open');
+    content.classList.toggle('open');
+  }
+
+  // TAB SWITCHING
+  function generatePayPeriods() {
+    const select = document.getElementById('payPeriod');
+    
+    for (let i = 1; i <= 12; i++) {
+      const payDate = new Date(lastPayDate);
+      payDate.setDate(payDate.getDate() + (i - 1) * 28);
+      
+      const timestamp = payDate.getTime();
+      const savedData = localStorage.getItem('wage_' + timestamp);
+      const saved = savedData ? ' ✓' : '';
+      
+      const periodLabel = `Payday: ${formatDate(payDate)}${saved}`;
+      
+      const option = document.createElement('option');
+      option.value = timestamp;
+      option.textContent = periodLabel;
+      select.appendChild(option);
+    }
+  }
+
+  function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  document.getElementById('payPeriod').addEventListener('change', function() {
+    if (this.value) {
+      const payDate = new Date(parseInt(this.value));
+      const periodDates = document.getElementById('periodDates');
+      periodDates.textContent = `Pay date: ${formatDate(payDate)}`;
+      
+      // Close all accordion sections
+      document.querySelectorAll('.accordion-header').forEach(header => {
+        header.classList.remove('open');
+        header.nextElementSibling.classList.remove('open');
+      });
+      
+      // Clear all input values
+      document.getElementById('bhRostered').value = '0';
+      document.getElementById('bhNonRostered').value = '0';
+      document.getElementById('xmasRostered').value = '0';
+      document.getElementById('xmasNonRostered').value = '0';
+      document.getElementById('boxingRostered').value = '0';
+      document.getElementById('boxingNonRostered').value = '0';
+      
+      // Update displayed values
+      updateBhValue();
+      updateXmasValue();
+      updateBoxingValue();
+      
+      // Hide results card first
+      document.getElementById('resultsCard').style.display = 'none';
+      
+      // Then load saved wage if available
+      loadSavedWage();
+    }
+  });
+
+  document.getElementById('salaryInput').addEventListener('input', calculateHourlyRate);
+
+  function calculateWage() {
+    const salary = parseFloat(document.getElementById('salaryInput').value) || 0;
+    const hourlyRate = getHourlyRate();
+
+    const standardOt = parseFloat(document.getElementById('standardOt').value) || 0;
+    const sundayPay = parseFloat(document.getElementById('sundayPay').value) || 0;
+    const bhRostered = parseFloat(document.getElementById('bhRostered').value) || 0;
+    const bhNonRostered = parseFloat(document.getElementById('bhNonRostered').value) || 0;
+    const xmasRostered = parseFloat(document.getElementById('xmasRostered').value) || 0;
+    const xmasNonRostered = parseFloat(document.getElementById('xmasNonRostered').value) || 0;
+    const boxingRostered = parseFloat(document.getElementById('boxingRostered').value) || 0;
+    const boxingNonRostered = parseFloat(document.getElementById('boxingNonRostered').value) || 0;
+
+    if (!document.getElementById('payPeriod').value) {
+      alert('Please select a pay period');
+      return;
+    }
+
+    const basePay4weeks = salary / 13;
+
+    const standardOtPay = standardOt * hourlyRate * 1.25;
+    const sundayPayAmount = sundayPay * hourlyRate * 1.25;
+    const bhRosteredPay = bhRostered * hourlyRate * 1.50;
+    const bhNonRosteredPay = bhNonRostered * hourlyRate * 2.50;
+    const xmasRosteredPay = xmasRostered * hourlyRate * 2.00;
+    const xmasNonRosteredPay = xmasNonRostered * hourlyRate * 3.00;
+    const boxingRosteredPay = boxingRostered * hourlyRate * 2.00;
+    const boxingNonRosteredPay = boxingNonRostered * hourlyRate * 3.00;
+
+    const totalPay = basePay4weeks + standardOtPay + sundayPayAmount + bhRosteredPay + bhNonRosteredPay + xmasRosteredPay + xmasNonRosteredPay + boxingRosteredPay + boxingNonRosteredPay;
+
+    const resultsCard = document.getElementById('resultsCard');
+    resultsCard.style.display = 'block';
+    
+    document.getElementById('totalPay').textContent = '£' + totalPay.toFixed(2);
+
+    let breakdownHtml = `
+      <div class="breakdown-row">
+        <span class="breakdown-label">Base salary (4 weeks)</span>
+        <span class="breakdown-value">£${basePay4weeks.toFixed(2)}</span>
+      </div>
+    `;
+
+    if (standardOt > 0) {
+      breakdownHtml += `
+        <div class="breakdown-row">
+          <span class="breakdown-label">${standardOt} hours @ 125% (standard overtime)</span>
+          <span class="breakdown-value">£${standardOtPay.toFixed(2)}</span>
+        </div>
+      `;
+    }
+
+    if (sundayPay > 0) {
+      breakdownHtml += `
+        <div class="breakdown-row">
+          <span class="breakdown-label">${sundayPay} hours @ 125% (Sunday pay)</span>
+          <span class="breakdown-value">£${sundayPayAmount.toFixed(2)}</span>
+        </div>
+      `;
+    }
+
+    if (bhRostered > 0) {
+      breakdownHtml += `
+        <div class="breakdown-row">
+          <span class="breakdown-label">${bhRostered} hours @ 150% (bank holiday - rostered)</span>
+          <span class="breakdown-value">£${bhRosteredPay.toFixed(2)}</span>
+        </div>
+      `;
+    }
+
+    if (bhNonRostered > 0) {
+      breakdownHtml += `
+        <div class="breakdown-row">
+          <span class="breakdown-label">${bhNonRostered} hours @ 250% (bank holiday - not rostered)</span>
+          <span class="breakdown-value">£${bhNonRosteredPay.toFixed(2)}</span>
+        </div>
+      `;
+    }
+
+    if (xmasRostered > 0) {
+      breakdownHtml += `
+        <div class="breakdown-row">
+          <span class="breakdown-label">${xmasRostered} hours @ 200% (Christmas - rostered)</span>
+          <span class="breakdown-value">£${xmasRosteredPay.toFixed(2)}</span>
+        </div>
+      `;
+    }
+
+    if (xmasNonRostered > 0) {
+      breakdownHtml += `
+        <div class="breakdown-row">
+          <span class="breakdown-label">${xmasNonRostered} hours @ 300% (Christmas - not rostered)</span>
+          <span class="breakdown-value">£${xmasNonRosteredPay.toFixed(2)}</span>
+        </div>
+      `;
+    }
+
+    if (boxingRostered > 0) {
+      breakdownHtml += `
+        <div class="breakdown-row">
+          <span class="breakdown-label">${boxingRostered} hours @ 200% (Boxing Day - rostered)</span>
+          <span class="breakdown-value">£${boxingRosteredPay.toFixed(2)}</span>
+        </div>
+      `;
+    }
+
+    if (boxingNonRostered > 0) {
+      breakdownHtml += `
+        <div class="breakdown-row">
+          <span class="breakdown-label">${boxingNonRostered} hours @ 300% (Boxing Day - not rostered)</span>
+          <span class="breakdown-value">£${boxingNonRosteredPay.toFixed(2)}</span>
+        </div>
+      `;
+    }
+
+    breakdownHtml += `
+      <div class="breakdown-row total">
+        <span>Total gross pay</span>
+        <span class="breakdown-value">£${totalPay.toFixed(2)}</span>
+      </div>
+    `;
+
+    document.getElementById('breakdown').innerHTML = breakdownHtml;
+
+    // Handle tax and NI calculation if checkbox is checked
+    const showTax = document.getElementById('showTaxCheckbox').checked;
+    const taxSection = document.getElementById('taxSection');
+    
+    if (showTax) {
+      taxSection.style.display = 'block';
+      const taxData = calculateTaxAndNI(totalPay);
+      
+      const incomeTaxPercent = ((taxData.incomeTax / totalPay) * 100).toFixed(1);
+      const niPercent = ((taxData.nationalInsurance / totalPay) * 100).toFixed(1);
+      
+      let taxBreakdownHtml = `
+        <div class="breakdown-row">
+          <span class="breakdown-label">Income tax (approx.) <span style="color: var(--text-secondary); font-weight: normal;">${incomeTaxPercent}%</span></span>
+          <span class="breakdown-value">-£${taxData.incomeTax.toFixed(2)}</span>
+        </div>
+        <button onclick="toggleTaxDetails('incomeTaxDetails')" class="tax-details-btn">Show working</button>
+        <div id="incomeTaxDetails" class="tax-details-content" style="display: none;">
+          <strong style="color: var(--text-primary);">Income tax calculation:</strong><br>
+          Tax code: <strong>1257L</strong><br>
+          Annual gross pay: £${(totalPay * 13).toFixed(2)}<br>
+          Personal allowance: £12,570<br>
+          Taxable income: £${((totalPay * 13) - 12570).toFixed(2)}<br>
+          Tax at 20%: £${(taxData.incomeTax * 13).toFixed(2)} (annual)<br>
+          Tax per 4 weeks: £${taxData.incomeTax.toFixed(2)}<br>
+          <span style="margin-top: 0.5rem; display: block; color: var(--text-secondary); font-size: 11px;">Based on standard tax code 1257L</span>
+        </div>
+        <div class="breakdown-row">
+          <span class="breakdown-label">National Insurance (approx.) <span style="color: var(--text-secondary); font-weight: normal;">${niPercent}%</span></span>
+          <span class="breakdown-value">-£${taxData.nationalInsurance.toFixed(2)}</span>
+        </div>
+        <button onclick="toggleTaxDetails('niDetails')" class="tax-details-btn">Show working</button>
+        <div id="niDetails" class="tax-details-content" style="display: none;">
+          <strong style="color: var(--text-primary);">National Insurance calculation:</strong><br>
+          Annual gross pay: £${(totalPay * 13).toFixed(2)}<br>
+          NI threshold: £12,570<br>
+          Liable income: £${((totalPay * 13) - 12570).toFixed(2)}<br>
+          NI at 8%: £${(taxData.nationalInsurance * 13).toFixed(2)} (annual)<br>
+          NI per 4 weeks: £${taxData.nationalInsurance.toFixed(2)}
+        </div>
+        <div class="breakdown-row total">
+          <span>Total deductions</span>
+          <span class="breakdown-value">-£${taxData.totalDeductions.toFixed(2)}</span>
+        </div>
+      `;
+      
+      document.getElementById('taxBreakdown').innerHTML = taxBreakdownHtml;
+      document.getElementById('netPay').textContent = '£' + taxData.netPay.toFixed(2);
+    } else {
+      taxSection.style.display = 'none';
+    }
+
+    // Check if there's saved data for this period and show/hide clear button
+    const currentPayPeriod = document.getElementById('payPeriod').value;
+    const savedData = localStorage.getItem('wage_' + currentPayPeriod);
+    document.getElementById('clearBtn').style.display = savedData ? 'block' : 'none';
+  }
+
+  function calculateTaxAndNI(grossPay4weeks) {
+    // Annualise the 4-week pay period to get annual gross (13 periods per year)
+    const annualGross = grossPay4weeks * 13;
+    
+    // 2025/26 UK tax rates
+    const personalAllowance = 12570;
+    const basicRateLimit = 50270;
+    const higherRateLimit = 125140;
+    
+    // Calculate income tax
+    let incomeTaxAnnual = 0;
+    if (annualGross > personalAllowance) {
+      const taxableIncome = annualGross - personalAllowance;
+      if (taxableIncome <= (basicRateLimit - personalAllowance)) {
+        // 20% basic rate
+        incomeTaxAnnual = taxableIncome * 0.20;
+      } else {
+        // Basic rate + higher rate
+        const basicRateTax = (basicRateLimit - personalAllowance) * 0.20;
+        const higherRateIncome = taxableIncome - (basicRateLimit - personalAllowance);
+        const higherRateTax = higherRateIncome * 0.40;
+        incomeTaxAnnual = basicRateTax + higherRateTax;
+      }
+    }
+    
+    // Calculate National Insurance (2025/26 rates)
+    // Employee NI: 8% between £12,570 and £50,270, then 2% above
+    let niAnnual = 0;
+    if (annualGross > 12570) {
+      const niableIncome = annualGross - 12570;
+      if (niableIncome <= (50270 - 12570)) {
+        niAnnual = niableIncome * 0.08;
+      } else {
+        const basicRateNI = (50270 - 12570) * 0.08;
+        const higherRateNI = (niableIncome - (50270 - 12570)) * 0.02;
+        niAnnual = basicRateNI + higherRateNI;
+      }
+    }
+    
+    // Convert to 4-week period
+    const incomeTax = incomeTaxAnnual / 13;
+    const nationalInsurance = niAnnual / 13;
+    const totalDeductions = incomeTax + nationalInsurance;
+    const netPay = grossPay4weeks - totalDeductions;
+    
+    return {
+      incomeTax: incomeTax,
+      nationalInsurance: nationalInsurance,
+      totalDeductions: totalDeductions,
+      netPay: netPay
+    };
+  }
+
+  function saveWage() {
+    const payPeriod = document.getElementById('payPeriod').value;
+    if (!payPeriod) {
+      alert('Please select a pay period first');
+      return;
+    }
+
+    const wageData = {
+      salary: document.getElementById('salaryInput').value,
+      standardOt: document.getElementById('standardOt').value,
+      sundayPay: document.getElementById('sundayPay').value,
+      bhRostered: document.getElementById('bhRostered').value,
+      bhNonRostered: document.getElementById('bhNonRostered').value,
+      xmasRostered: document.getElementById('xmasRostered').value,
+      xmasNonRostered: document.getElementById('xmasNonRostered').value,
+      boxingRostered: document.getElementById('boxingRostered').value,
+      boxingNonRostered: document.getElementById('boxingNonRostered').value,
+      totalPay: document.getElementById('totalPay').textContent
+    };
+
+    localStorage.setItem('wage_' + payPeriod, JSON.stringify(wageData));
+    
+    // Update the dropdown to show saved indicator
+    regeneratePayPeriods();
+    
+    // Show clear button
+    document.getElementById('clearBtn').style.display = 'block';
+    
+    alert('Pay period saved!');
+  }
+
+  function clearSavedWage() {
+    const payPeriod = document.getElementById('payPeriod').value;
+    if (!payPeriod) {
+      alert('Please select a pay period first');
+      return;
+    }
+
+    if (confirm('Are you sure you want to delete the saved data for this pay period?')) {
+      localStorage.removeItem('wage_' + payPeriod);
+      
+      // Update the dropdown to remove saved indicator
+      regeneratePayPeriods();
+      
+      // Hide clear button
+      document.getElementById('clearBtn').style.display = 'none';
+      
+      alert('Saved data deleted');
+    }
+  }
+
+  function regeneratePayPeriods() {
+    const select = document.getElementById('payPeriod');
+    const currentValue = select.value;
+    
+    // Clear existing options
+    select.innerHTML = '<option value="">Select a period...</option>';
+    
+    for (let i = 1; i <= 12; i++) {
+      const payDate = new Date(lastPayDate);
+      payDate.setDate(payDate.getDate() + (i - 1) * 28);
+      
+      const timestamp = payDate.getTime();
+      const savedData = localStorage.getItem('wage_' + timestamp);
+      const saved = savedData ? ' ✓' : '';
+      
+      const periodLabel = `Payday: ${formatDate(payDate)}${saved}`;
+      
+      const option = document.createElement('option');
+      option.value = timestamp;
+      option.textContent = periodLabel;
+      select.appendChild(option);
+    }
+    
+    // Restore previous selection
+    select.value = currentValue;
+  }
+
+  function resetAllWithConfirmation() {
+    // First confirmation
+    const confirmed = confirm('Are you sure you want to reset all fields? This will clear all your data.');
+    
+    if (!confirmed) {
+      return; // User cancelled
+    }
+    
+    // Second confirmation
+    const doubleConfirmed = confirm('This action cannot be undone. Click OK to reset everything, or Cancel to go back.');
+    
+    if (doubleConfirmed) {
+      clearAllFields();
+      // Optional: also clear the salary
+      document.getElementById('salaryInput').value = '';
+      calculateHourlyRate();
+      alert('All fields have been reset.');
+    }
+  }
+
+  function clearAllFields() {
+    // Clear all input fields
+    document.getElementById('standardOt').value = '0';
+    document.getElementById('sundayPay').value = '0';
+    document.getElementById('bhRostered').value = '0';
+    document.getElementById('bhNonRostered').value = '0';
+    document.getElementById('xmasRostered').value = '0';
+    document.getElementById('xmasNonRostered').value = '0';
+    document.getElementById('boxingRostered').value = '0';
+    document.getElementById('boxingNonRostered').value = '0';
+    
+    // Close all accordion sections
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.classList.remove('open');
+      header.nextElementSibling.classList.remove('open');
+    });
+    
+    // Hide results card
+    document.getElementById('resultsCard').style.display = 'none';
+    
+    // Uncheck tax checkbox
+    document.getElementById('showTaxCheckbox').checked = false;
+  }
+
+  function handlePayPeriodChange() {
+    const payPeriod = document.getElementById('payPeriod').value;
+    
+    // If no period selected, clear everything
+    if (!payPeriod) {
+      clearAllFields();
+      return;
+    }
+    
+    // Clear all fields first
+    clearAllFields();
+    
+    // Then load saved data if it exists for this period
+    loadSavedWage();
+  }
+
+  function loadSavedWage() {
+    const payPeriod = document.getElementById('payPeriod').value;
+    if (!payPeriod) return;
+
+    const savedData = localStorage.getItem('wage_' + payPeriod);
+    if (!savedData) return;
+
+    const data = JSON.parse(savedData);
+    
+    document.getElementById('salaryInput').value = data.salary;
+    document.getElementById('standardOt').value = data.standardOt;
+    document.getElementById('sundayPay').value = data.sundayPay;
+    document.getElementById('bhRostered').value = data.bhRostered;
+    document.getElementById('bhNonRostered').value = data.bhNonRostered;
+    document.getElementById('xmasRostered').value = data.xmasRostered;
+    document.getElementById('xmasNonRostered').value = data.xmasNonRostered;
+    document.getElementById('boxingRostered').value = data.boxingRostered;
+    document.getElementById('boxingNonRostered').value = data.boxingNonRostered;
+    
+    calculateHourlyRate();
+    calculateWage();
+  }
+
+  function toggleTaxDetails(elementId) {
+    const element = document.getElementById(elementId);
+    if (element.style.display === 'none') {
+      element.style.display = 'block';
+    } else {
+      element.style.display = 'none';
+    }
+  }
+
+  generatePayPeriods();
+  calculateHourlyRate();
+  updateSalaryLockState();
+</script>
+</body>
+</html>
+<!-- Made by Shaffy with a little help from Claude - Started 26.03.2026 - Finished V1 on 11.04.2026 -->
