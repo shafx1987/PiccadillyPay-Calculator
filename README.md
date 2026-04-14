@@ -49,6 +49,10 @@ Made by Shaffy with a little help from Claude
 Started: 26.03.2026  
 Version 1.0: 11.04.2026
 
+## Future Features
+
+See the [V2.0 Roadmap](V2.0_ROADMAP.md) for planned features.
+
 ---
 
 **Disclaimer:** Tax and NI calculations are estimates only. They do not account for personal tax codes, pension contributions, student loan repayments, or other deductions. Consult HMRC or a tax professional for accurate figures.
